@@ -1,8 +1,6 @@
 // Функция для проверки длины строки.
 
-function checkLengthString (string, maxLength) {
-  return string.length <= maxLength;
-}
+const checkLengthString = (string, maxLength) => string.length <= maxLength;
 
 checkLengthString('проверяемая строка', 20); // true
 checkLengthString('проверяемая строка', 18); // true
@@ -16,14 +14,14 @@ checkLengthString('проверяемая строка', 10); // false
 // Функция для проверки, является ли строка палиндромом
 
 function isPalindrome (string) {
-  const firstString = string.toLowerCase(). replaceAll(' ', '');
-  let secondString = '';
+  const inputString = string.toLowerCase(). replaceAll(' ', '');
+  let reverseString = '';
 
-  for (let i = firstString.length - 1; i >= 0; i--) {
-    secondString += firstString[i];
+  for (let i = inputString.length - 1; i >= 0; i--) {
+    reverseString += inputString[i];
   }
 
-  return secondString === firstString;
+  return reverseString === inputString;
 }
 
 isPalindrome('топот'); // true
