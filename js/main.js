@@ -57,24 +57,24 @@ const createUniqueId = (min, max) => {
   };
 };
 
-const createMessage = (count, array) => {
-  let message = '';
-  if (count === 1) {
-    message = array[getRandomInteger(0, array.length - 1)];
-  } else {
-    message = `${array[getRandomInteger(0, array.length - 1)]} ${createMessage(count - 1, array)}`;
-  }
-  return message;
-};
-
-// Создание сообщения через цикл
 // const createMessage = (count, array) => {
 //   let message = '';
-//   for(let i = 1; i <= count; i++) {
-//     message += `${array[getRandomInteger(0, array.length - 1)]} `;
+//   if (count === 1) {
+//     message = array[getRandomInteger(0, array.length - 1)];
+//   } else {
+//     message = `${array[getRandomInteger(0, array.length - 1)]} ${createMessage(count - 1, array)}`;
 //   }
 //   return message;
 // };
+
+// Создание сообщения через цикл
+const createMessage = (count, array) => {
+  const message = [];
+  for(let i = 0; i <= count - 1; i++) {
+    message[i] = array[getRandomInteger(0, array.length - 1)];
+  }
+  return message.join(' ');
+};
 
 const PHOTO_POST_COUNT = 25;
 const createIdPhoto = createIdGenerator();
@@ -96,14 +96,13 @@ function createCommentPost () {
 }
 
 const createPhotoPost = () => {
-  const numberLikes = getRandomInteger(15, 200);
   const AdressIndex = randomAdressIndex();
 
   return {
     id: createIdPhoto(),
     url: `photos/${AdressIndex}.jpg`,
     description: DESCRIPTION[AdressIndex - 1],
-    likes: numberLikes,
+    likes: getRandomInteger(15, 200),
     comments: Array.from({length: getRandomInteger(0, 30)}, createCommentPost)
   };
 };
