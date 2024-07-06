@@ -2,7 +2,7 @@ const DESCRIPTION = [
   'Описание 1', 'Описание 2', 'Описание 3', 'Описание 4', 'Описание 5', 'Описание 6', 'Описание 7', 'Описание 8', 'Описание 9', 'Описание 10',
   'Описание 11', 'Описание 12', 'Описание 13', 'Описание 14', 'Описание 15', 'Описание 16', 'Описание 17', 'Описание 18',
   'Описание 19', 'Описание 20', 'Описание 21', 'Описание 22', 'Описание 23', 'Описание 24', 'Описание 25',
-];
+]; // описание фотографий
 
 const NAMES = [
   'Иван',
@@ -13,7 +13,7 @@ const NAMES = [
   'Лидия',
   'Петр',
   'Фавронья',
-];
+]; // имена коментаторов
 
 const MESSAGES = [
   'Всё отлично!',
@@ -22,8 +22,9 @@ const MESSAGES = [
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
-];
+]; // варианты сообщений
 
+// счетчик, создание уникальных id
 const createIdGenerator = () => {
   let lastGeneratedId = 0;
 
@@ -33,6 +34,7 @@ const createIdGenerator = () => {
   };
 };
 
+// генератор случайных чисел
 const getRandomInteger = (min, max) => {
   const lower = Math.ceil(Math.min(min, max));
   const upper = Math.floor(Math.max(min, max));
@@ -40,6 +42,7 @@ const getRandomInteger = (min, max) => {
   return Math.floor(result);
 };
 
+// генератор уникальных случайных чисел
 const createUniqueId = (min, max) => {
   const previousValues = [];
 
@@ -57,6 +60,7 @@ const createUniqueId = (min, max) => {
   };
 };
 
+// Фунцкия для создания сообщений
 // const createMessage = (count, array) => {
 //   let message = '';
 //   if (count === 1) {
@@ -76,14 +80,15 @@ const createMessage = (count, array) => {
   return message.join(' ');
 };
 
-const PHOTO_POST_COUNT = 25;
-const createIdPhoto = createIdGenerator();
-const createIdComment = createIdGenerator();
+const PHOTO_POST_COUNT = 25; // количество фото в посте
+const createIdPhoto = createIdGenerator(); // уникальные id для фотографий
+const createIdComment = createIdGenerator(); // уникальные id для комментариев
 const randomAdressIndex = createUniqueId(1, PHOTO_POST_COUNT);
 
+// функция для создания списка комментариев
 function createCommentPost () {
-  const avatarName = getRandomInteger(1,6);
-  const countMessage = getRandomInteger(1,2);
+  const avatarName = getRandomInteger(1,6); // случайное число для формирования адреса аватара с выбором соотвествующего имени
+  const countMessage = getRandomInteger(1,2); // количество предложений для формирования тескта комментария
 
   return {
     id: createIdComment(),
@@ -95,8 +100,9 @@ function createCommentPost () {
   };
 }
 
+// функция для создания массива с описанием фотографий
 const createPhotoPost = () => {
-  const AdressIndex = randomAdressIndex();
+  const AdressIndex = randomAdressIndex(); // номер фотографии, также используется для выбра описания для данной фотографии
 
   return {
     id: createIdPhoto(),
