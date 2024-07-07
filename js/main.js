@@ -1,7 +1,13 @@
+const PHOTO_POST_COUNT = 25; // количество фото в посте
+const COMMENT_MAX_COUNT = 30; // количество комментариев
+const LIKE_MIN_COUNT = 15;
+const LIKE_MAX_COUNT = 200;
+const AVATAR_MAX_COUNT = 6; // количество аватаров
+
 const DESCRIPTION = [
-  'Описание 1', 'Описание 2', 'Описание 3', 'Описание 4', 'Описание 5', 'Описание 6', 'Описание 7', 'Описание 8', 'Описание 9', 'Описание 10',
-  'Описание 11', 'Описание 12', 'Описание 13', 'Описание 14', 'Описание 15', 'Описание 16', 'Описание 17', 'Описание 18',
-  'Описание 19', 'Описание 20', 'Описание 21', 'Описание 22', 'Описание 23', 'Описание 24', 'Описание 25',
+  'Красивый пляж', 'Дорога к морю', 'Ах это море', 'А на море белый песок', 'Веселый обед', 'Клевая тачка', 'Плотный завтрак', 'Кому компотика?', 'Можно достать рукой', 'Организация простанства',
+  'Шикарный вид', 'Машинка...', 'Полезный перекус', 'Суши с котом', 'Теплые носочки', 'Высоко', 'Хор', 'Красненькая',
+  'Чтобы не споткнуться', 'Территория', 'А на ужин...', 'Красивый закат', 'Крабик', 'Концерт', 'Бегемот разинул рот...',
 ]; // описание фотографий
 
 const NAMES = [
@@ -43,15 +49,11 @@ const getRandomInteger = (min, max) => {
 };
 
 // генератор уникальных случайных чисел
-const createUniqueId = (min, max) => {
+const getUniqueRandomId = (min, max) => {
   const previousValues = [];
 
   return function () {
     let currentValue = getRandomInteger(min, max);
-    // if (previousValues.length >= (max - min + 1)) {
-    //   console.error('Перебраны все числа из диапазона от ' + min + ' до ' + max);
-    //   return null;
-    // }
     while (previousValues.includes(currentValue)) {
       currentValue = getRandomInteger(min, max);
     }
@@ -60,56 +62,40 @@ const createUniqueId = (min, max) => {
   };
 };
 
-// Фунцкия для создания сообщений
-// const createMessage = (count, array) => {
-//   let message = '';
-//   if (count === 1) {
-//     message = array[getRandomInteger(0, array.length - 1)];
-//   } else {
-//     message = `${array[getRandomInteger(0, array.length - 1)]} ${createMessage(count - 1, array)}`;
-//   }
-//   return message;
-// };
+//Функция для выбора случайного элемента из массива
+const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
-// Создание сообщения через цикл
+// Фунцкия для создания сообщений
 const createMessage = (count, array) => {
   const message = [];
   for(let i = 0; i <= count - 1; i++) {
-    message[i] = array[getRandomInteger(0, array.length - 1)];
+    message[i] = getRandomArrayElement(array);
   }
   return message.join(' ');
 };
 
-const PHOTO_POST_COUNT = 25; // количество фото в посте
 const createIdPhoto = createIdGenerator(); // уникальные id для фотографий
 const createIdComment = createIdGenerator(); // уникальные id для комментариев
-const randomAdressIndex = createUniqueId(1, PHOTO_POST_COUNT);
+const randomAdressIndex = getUniqueRandomId(1, PHOTO_POST_COUNT);
 
 // функция для создания списка комментариев
-function createCommentPost () {
-  const avatarName = getRandomInteger(1,6); // случайное число для формирования адреса аватара с выбором соотвествующего имени
-  const countMessage = getRandomInteger(1,2); // количество предложений для формирования тескта комментария
-
-  return {
-    id: createIdComment(),
-    // avatar: `img/avatar-${getRandomInteger(1,6)}.svg`,
-    avatar: `img/avatar-${avatarName}.svg`,
-    message: createMessage(countMessage, MESSAGES),
-    // name: NAMES[getRandomInteger(0, NAMES.length - 1)]
-    name: NAMES[avatarName - 1]
-  };
-}
+const createCommentPost = () => ({
+  id: createIdComment(),
+  avatar: `img/avatar-${getRandomInteger(1,AVATAR_MAX_COUNT)}.svg`,
+  message: createMessage(getRandomInteger(1,2), MESSAGES),
+  name: getRandomArrayElement(NAMES)
+});
 
 // функция для создания массива с описанием фотографий
 const createPhotoPost = () => {
-  const AdressIndex = randomAdressIndex(); // номер фотографии, также используется для выбра описания для данной фотографии
+  const adressPhoto = randomAdressIndex(); // номер фотографии, также используется для выбра описания для данной фотографии
 
   return {
     id: createIdPhoto(),
-    url: `photos/${AdressIndex}.jpg`,
-    description: DESCRIPTION[AdressIndex - 1],
-    likes: getRandomInteger(15, 200),
-    comments: Array.from({length: getRandomInteger(0, 30)}, createCommentPost)
+    url: `photos/${adressPhoto}.jpg`,
+    description: DESCRIPTION[adressPhoto - 1],
+    likes: getRandomInteger(LIKE_MIN_COUNT, LIKE_MAX_COUNT),
+    comments: Array.from({length: getRandomInteger(0, COMMENT_MAX_COUNT)}, createCommentPost)
   };
 };
 
@@ -117,5 +103,3 @@ const simularPhoto = Array.from({length: PHOTO_POST_COUNT}, createPhotoPost);
 
 // eslint-disable-next-line no-console
 console.table(simularPhoto);
-// eslint-disable-next-line no-console
-console.table(simularPhoto[0].comments);
