@@ -1,4 +1,4 @@
-import {simularPhotoList} from './data.js';
+import {picturesBlock} from './thumbnails.js';
 
 // eslint-disable-next-line no-console
-console.table(simularPhotoList());
+console.log(picturesBlock);
