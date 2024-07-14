@@ -1,21 +1,22 @@
-import {simularPhotoList} from './data.js';
-
 const picturesBlock = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const pictureListFragment = document.createDocumentFragment();
 
-const simularPhotoElement = simularPhotoList();
+const createThumbnail = ({url, description, likes, comments}) => {
+  const thumbnail = pictureTemplate.cloneNode(true);
+  thumbnail.querySelector('.picture__img').src = url;
+  thumbnail.querySelector('.picture__img').alt = description;
+  thumbnail.querySelector('.picture__likes').textContent = likes;
+  thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  return thumbnail;
+};
 
-const simularPhotoListFragment = document.createDocumentFragment();
+const generateThumbnails = (pictures) => {
+  pictures.forEach((picture) => {
+    const pictureItem = createThumbnail(picture);
+    pictureListFragment.append(pictureItem);
+  });
+  picturesBlock.append(pictureListFragment);
+};
 
-simularPhotoElement.forEach(({url, description, likes, comments}) => {
-  const pictureItem = pictureTemplate.cloneNode(true);
-  pictureItem.querySelector('.picture__img').src = url;
-  pictureItem.querySelector('.picture__img').alt = description;
-  pictureItem.querySelector('.picture__likes').textContent = likes;
-  pictureItem.querySelector('.picture__comments').textContent = comments.length;
-  simularPhotoListFragment.append(pictureItem);
-});
-
-picturesBlock.append(simularPhotoListFragment);
-
-export {picturesBlock};
+export {generateThumbnails};
