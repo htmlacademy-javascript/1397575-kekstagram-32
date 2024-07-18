@@ -33,4 +33,6 @@ const getUniqueRandomId = (min, max) => {
 //Функция для выбора случайного элемента из массива
 const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
-export {createIdGenerator, getRandomInteger, getUniqueRandomId, getRandomArrayElement};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {createIdGenerator, getRandomInteger, getUniqueRandomId, getRandomArrayElement, isEscapeKey};
