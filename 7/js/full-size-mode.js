@@ -7,6 +7,31 @@ const commentsList = bigPicture.querySelector('.social__comments');
 const commentItem = commentsList.querySelector('.social__comment');
 const counterComments = bigPicture.querySelector('.social__comment-count');
 const loaderComments = bigPicture.querySelector('.comments-loader');
+const shownCountComments = counterComments.querySelector('.social__comment-shown-count');
+
+//функция для поочередного вывода списка комментариев
+const createCounterComments = (n) => {
+  const commentsArray = commentsList.querySelectorAll('.social__comment');
+  commentsArray.forEach((comment) => comment.classList.add('hidden'));
+  loaderComments.classList.remove('hidden');
+  counterComments.classList.remove('hidden');
+  if (commentsArray.length <= 5 * n) {
+    shownCountComments.textContent = commentsArray.length;
+    commentsArray.forEach((comment) => comment.classList.remove('hidden'));
+    loaderComments.classList.add('hidden');
+  } else {
+    shownCountComments.textContent = 5 * n;
+    for (let i = 0; i < 5 * n; i++) {
+      commentsArray[i].classList.remove('hidden');
+    }
+    loaderComments.addEventListener('click', onButtonLoaderClick);
+  }
+
+  function onButtonLoaderClick() {
+    n++;
+    createCounterComments(n);
+  }
+};
 
 // Заполнение поста данными
 const createFullSizePicture = ({url, description, likes, comments}) => {
@@ -14,6 +39,8 @@ const createFullSizePicture = ({url, description, likes, comments}) => {
   bigPicture.querySelector('img').alt = description;
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.social__caption').textContent = description;
+  //для счетчика комментариев
+  counterComments.querySelector('.social__comment-total-count').textContent = comments.length;
 
   commentsList.innerHTML = '';
 
@@ -25,7 +52,7 @@ const createFullSizePicture = ({url, description, likes, comments}) => {
     comment.querySelector('.social__text').textContent = message;
     commentsList.append(comment);
   });
-
+  createCounterComments(1);
 };
 
 // Функция для отображения поста с изображением
