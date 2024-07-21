@@ -1,5 +1,6 @@
 import {isEscapeKey} from './util.js';
 
+const STEPVALUE = 5;
 const thumbnails = document.querySelector('.pictures');
 const bigPicture = document.querySelector('.big-picture');
 const buttonClosePictire = bigPicture.querySelector('.big-picture__cancel');
@@ -10,27 +11,27 @@ const loaderComments = bigPicture.querySelector('.comments-loader');
 const shownCountComments = counterComments.querySelector('.social__comment-shown-count');
 
 //функция для поочередного вывода списка комментариев
-const createCounterComments = (n) => {
+let countStep = 1;
+const createCounterComments = () => {
   const commentsArray = commentsList.querySelectorAll('.social__comment');
   commentsArray.forEach((comment) => comment.classList.add('hidden'));
   loaderComments.classList.remove('hidden');
   counterComments.classList.remove('hidden');
-  if (commentsArray.length <= 5 * n) {
+  if (commentsArray.length <= STEPVALUE * countStep) {
     shownCountComments.textContent = commentsArray.length;
     commentsArray.forEach((comment) => comment.classList.remove('hidden'));
     loaderComments.classList.add('hidden');
   } else {
-    shownCountComments.textContent = 5 * n;
-    for (let i = 0; i < 5 * n; i++) {
+    shownCountComments.textContent = STEPVALUE * countStep;
+    for (let i = 0; i < STEPVALUE * countStep; i++) {
       commentsArray[i].classList.remove('hidden');
     }
-    loaderComments.addEventListener('click', onButtonLoaderClick);
   }
+};
 
-  function onButtonLoaderClick() {
-    n++;
-    createCounterComments(n);
-  }
+const onButtonLoaderClick = () => {
+  countStep++;
+  createCounterComments();
 };
 
 // Заполнение поста данными
@@ -52,24 +53,28 @@ const createFullSizePicture = ({url, description, likes, comments}) => {
     comment.querySelector('.social__text').textContent = message;
     commentsList.append(comment);
   });
-  createCounterComments(1);
+  createCounterComments();
 };
 
 // Функция для отображения поста с изображением
 const openFullSizePost = () => {
+  countStep = 1; // переменная для работы прокрутки комментариев
   bigPicture.classList.remove('hidden');
   counterComments.classList.add('hidden');
   loaderComments.classList.add('hidden');
   document.body.classList.add('modal-open');
 
   document.addEventListener('keydown', onDocumentKeydown);
+  loaderComments.addEventListener('click', onButtonLoaderClick);
 };
 
 // функция для скрытия поста
-const closeFullSizePost = () => {
+function closeFullSizePost() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
-};
+  document.removeEventListener('keydown', onDocumentKeydown);
+  loaderComments.removeEventListener('click', onButtonLoaderClick);
+}
 
 function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
@@ -81,6 +86,7 @@ function onDocumentKeydown(evt) {
 const generateFullSizePost = (array) => {
   const onThumbnailClick = (evt) => {
     if (evt.target.closest('a')) {
+      evt.preventDefault();
       openFullSizePost();
       bigPicture.classList.remove('hidden');
       const id = Number(evt.target.closest('a').dataset.id);
@@ -93,5 +99,3 @@ const generateFullSizePost = (array) => {
 };
 
 export {generateFullSizePost};
-
-
