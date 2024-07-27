@@ -1,11 +1,11 @@
 const MAX_LENGTH_COMMENT = 140;
 const MAX_COUNT_HASHTAGS = 5;
 
-const formUpload = document.querySelector('#upload-select-image');
+const formLoadingImage = document.querySelector('#upload-select-image');
 const hashtagsInput = document.querySelector('.text__hashtags');
 const commentInput = document.querySelector('.text__description');
 
-const prestine = new Pristine(formUpload, {
+const prestine = new Pristine(formLoadingImage, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper--error'
@@ -57,7 +57,7 @@ prestine.addValidator(
   'хэштеги повторяются'
 );
 
-formUpload.addEventListener('submit', (evt) => {
+formLoadingImage.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   const isValid = prestine.validate();

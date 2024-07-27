@@ -1,8 +1,7 @@
 import {isEscapeKey} from './util.js';
 import './validation-form.js';
-import './scale.js';
 
-const inputUpload = document.querySelector('#upload-file');
+const inputLoadingFile = document.querySelector('#upload-file');
 const imageEditForm = document.querySelector('.img-upload__overlay');
 const buttonClose = imageEditForm.querySelector('#upload-cancel');
 const hashtagsInput = document.querySelector('.text__hashtags');
@@ -23,7 +22,7 @@ const openEditForm = () => {
 const closeEditForm = () => {
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  inputUpload.value = '';
+  inputLoadingFile.value = '';
   hashtagsInput.value = '';
   commentInput.value = '';
 
@@ -56,4 +55,4 @@ function onInputKeydown(evt) {
   }
 }
 
-inputUpload.addEventListener('change', onInputChange);
+inputLoadingFile.addEventListener('change', onInputChange);
