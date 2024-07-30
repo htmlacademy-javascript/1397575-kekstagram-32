@@ -1,6 +1,7 @@
 import {isEscapeKey} from './util.js';
 import './validation-form.js';
 import {changeScale, setDefaultScaleValues} from './scale.js';
+import {chooseEffectImage, destroySlider} from './effects.js';
 
 const inputLoadingFile = document.querySelector('#upload-file');
 const imageEditForm = document.querySelector('.img-upload__overlay');
@@ -13,6 +14,7 @@ const openEditForm = () => {
   imageEditForm.classList.remove('hidden');
   document.body.classList.add('modal-open');
   changeScale();
+  chooseEffectImage();
 
   document.addEventListener('keydown', onDocumentKeydown);
   buttonClose.addEventListener('click', onButtonCloseClick);
@@ -27,7 +29,9 @@ const closeEditForm = () => {
   inputLoadingFile.value = '';
   hashtagsInput.value = '';
   commentInput.value = '';
+
   setDefaultScaleValues();
+  destroySlider();
 
   document.removeEventListener('keydown', onDocumentKeydown);
   buttonClose.removeEventListener('click', onButtonCloseClick);
