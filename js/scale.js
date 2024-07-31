@@ -1,6 +1,7 @@
 const STEP_SCALE = 25;
 const MIN_VALUE_SCALE = 25;
 const MAX_VALUE_SCALE = 100;
+const DEFAULT_COUNT = 100;
 const DESIMAL_NOTATION = 10;
 const FULL_PERCENT = 100;
 
@@ -11,12 +12,16 @@ const scaleInput = scaleControl.querySelector('.scale__control--value');
 const containerImage = document.querySelector('.img-upload__preview');
 const imagePreview = containerImage.querySelector('img');
 
+const scaleImage = (value) => {
+  scaleInput.value = `${value}%`;
+  imagePreview.style.transform = `scale(${value / FULL_PERCENT})`;
+};
+
 const onScaleUpButtonClick = () => {
   const inputScaleValue = parseInt(scaleInput.value, DESIMAL_NOTATION); // получаем значение инпута без знака %
   if (inputScaleValue > MIN_VALUE_SCALE) {
     const currentInputValue = inputScaleValue - STEP_SCALE;
-    scaleInput.value = `${currentInputValue}%`;
-    imagePreview.style.transform = `scale(${currentInputValue / FULL_PERCENT})`;
+    scaleImage(currentInputValue);
   }
 };
 
@@ -24,8 +29,7 @@ const onScaleDownButtonClick = () => {
   const inputScaleValue = parseInt(scaleInput.value, DESIMAL_NOTATION); // получаем значение инпута без знака %
   if (inputScaleValue < MAX_VALUE_SCALE) {
     const currentInputValue = inputScaleValue + STEP_SCALE;
-    scaleInput.value = `${currentInputValue}%`;
-    imagePreview.style.transform = `scale(${currentInputValue / FULL_PERCENT})`;
+    scaleImage(currentInputValue);
   }
 };
 
@@ -34,11 +38,10 @@ const changeScale = () => {
   buttonScaleUp.addEventListener('click', onScaleUpButtonClick);
 };
 
-const setDefaultScaleValues = () => {
-  scaleInput.value = `${MAX_VALUE_SCALE}%`;
-  imagePreview.style.transform = `scale(${MAX_VALUE_SCALE / FULL_PERCENT})`;
+const resetScale = () => {
+  scaleImage(DEFAULT_COUNT);
   buttonScaleDown.removeEventListener('click', onScaleDownButtonClick);
   buttonScaleUp.removeEventListener('click', onScaleUpButtonClick);
 };
 
-export {changeScale, setDefaultScaleValues};
+export {changeScale, resetScale};

@@ -1,6 +1,6 @@
 import {isEscapeKey} from './util.js';
 import {validateForm} from './validation-form.js';
-import {changeScale, setDefaultScaleValues} from './scale.js';
+import {changeScale, resetScale} from './scale.js';
 import {chooseEffectImage, destroySlider} from './effects.js';
 
 const formLoading = document.querySelector('#upload-select-image');
@@ -46,7 +46,7 @@ const closeEditForm = () => {
   formLoading.reset();
   pristine.reset();
 
-  setDefaultScaleValues();
+  resetScale();
   destroySlider();
 
   formLoading.removeEventListener('submit', onFormSubmit);
