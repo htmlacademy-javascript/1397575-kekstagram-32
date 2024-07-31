@@ -1,21 +1,38 @@
 import {isEscapeKey} from './util.js';
-import './validation-form.js';
+import {validateForm} from './validation-form.js';
 import {changeScale, setDefaultScaleValues} from './scale.js';
 import {chooseEffectImage, destroySlider} from './effects.js';
 
-const inputLoadingFile = document.querySelector('#upload-file');
-const imageEditForm = document.querySelector('.img-upload__overlay');
-const buttonClose = imageEditForm.querySelector('#upload-cancel');
-const hashtagsInput = document.querySelector('.text__hashtags');
-const commentInput = document.querySelector('.text__description');
+const formLoading = document.querySelector('#upload-select-image');
+const inputLoadingFile = formLoading.querySelector('#upload-file');
+const imageEditForm = formLoading.querySelector('.img-upload__overlay');
+const buttonClose = formLoading.querySelector('#upload-cancel');
+const hashtagsInput = formLoading.querySelector('.text__hashtags');
+const commentInput = formLoading.querySelector('.text__description');
 
+const pristine = validateForm(formLoading);
+
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+
+  const isValid = pristine.validate();
+  if (isValid) {
+    // eslint-disable-next-line no-console
+    console.log('Форма отправлена');
+  } else {
+    // eslint-disable-next-line no-console
+    console.log('Форма не валидна');
+  }
+};
 
 const openEditForm = () => {
   imageEditForm.classList.remove('hidden');
   document.body.classList.add('modal-open');
+
   changeScale();
   chooseEffectImage();
 
+  formLoading.addEventListener('submit', onFormSubmit);
   document.addEventListener('keydown', onDocumentKeydown);
   buttonClose.addEventListener('click', onButtonCloseClick);
 
@@ -26,22 +43,18 @@ const openEditForm = () => {
 const closeEditForm = () => {
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  inputLoadingFile.value = '';
-  hashtagsInput.value = '';
-  commentInput.value = '';
+  formLoading.reset();
+  pristine.reset();
 
   setDefaultScaleValues();
   destroySlider();
 
+  formLoading.removeEventListener('submit', onFormSubmit);
   document.removeEventListener('keydown', onDocumentKeydown);
   buttonClose.removeEventListener('click', onButtonCloseClick);
 
   hashtagsInput.removeEventListener('keydown', onInputKeydown);
   commentInput.removeEventListener('keydown', onInputKeydown);
-};
-
-const onInputChange = () => {
-  openEditForm();
 };
 
 function onDocumentKeydown(evt) {
@@ -61,5 +74,9 @@ function onInputKeydown(evt) {
     evt.stopPropagation();
   }
 }
+
+const onInputChange = () => {
+  openEditForm();
+};
 
 inputLoadingFile.addEventListener('change', onInputChange);
