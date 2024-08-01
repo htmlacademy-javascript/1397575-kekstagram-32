@@ -1,71 +1,56 @@
-const MAX_LENGTH_COMMENT = 140;
 const MAX_COUNT_HASHTAGS = 5;
+const ETALON_HASHTAG = /^#[a-zа-яё0-9]{1,19}$/i;
+const ERROR_MESSAGE = {
+  ISVALID: 'введён невалидный хэштег',
+  MAXCOUNT: `превышено количество хэштегов, максимальное количество - ${MAX_COUNT_HASHTAGS}`,
+  REPEAT: 'хэштеги повторяются'
+};
 
-const formLoadingImage = document.querySelector('#upload-select-image');
 const hashtagsInput = document.querySelector('.text__hashtags');
-const commentInput = document.querySelector('.text__description');
 
-const prestine = new Pristine(formLoadingImage, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error'
-});
+const validateForm = (form) => {
+  const pristine = new Pristine(form, {
+    classTo: 'img-upload__field-wrapper',
+    errorTextParent: 'img-upload__field-wrapper',
+    errorTextClass: 'img-upload__field-wrapper--error'
+  });
 
-const validateCommentMaxLength = (value) => value.length <= MAX_LENGTH_COMMENT;
+  const createArrayHastags = (stringHashtags) => stringHashtags.trim().split(' ');
 
-prestine.addValidator(
-  commentInput,
-  validateCommentMaxLength,
-  'длина комментария больше 140 символов'
-);
+  const isInvalidHastag = (value) => {
+    if (!value) {
+      return true;
+    }
+    return createArrayHastags(value).every((hashtag) => ETALON_HASHTAG.test(hashtag));
+  };
 
-const validateInvalidHastag = (value) => {
-  if (!value) {
-    return true;
-  }
-  const hashtags = value.trim().split(' ');
-  const etalonHashtag = /^#[a-zа-яё0-9]{1,19}$/i;
-  return hashtags.every((hashtag) => etalonHashtag.test(hashtag));
+  const checkAmountHastag = (value) => createArrayHastags(value).length <= MAX_COUNT_HASHTAGS;
+
+  const isRepeatHastag = (value) => {
+    const hashtags = createArrayHastags(value).map((tag) => tag.toLowerCase());
+    const uniqueHashtags = new Set(hashtags);
+    return uniqueHashtags.size === hashtags.length;
+  };
+
+  pristine.addValidator(
+    hashtagsInput,
+    isInvalidHastag,
+    ERROR_MESSAGE.ISVALID
+  );
+
+  pristine.addValidator(
+    hashtagsInput,
+    checkAmountHastag,
+    ERROR_MESSAGE.MAXCOUNT
+  );
+
+  pristine.addValidator(
+    hashtagsInput,
+    isRepeatHastag,
+    ERROR_MESSAGE.REPEAT
+  );
+
+  return pristine;
 };
 
-const validateAmountHastag = (value) => {
-  const hashtags = value.trim().split(' ');
-  return hashtags.length <= MAX_COUNT_HASHTAGS;
-};
-
-const validateRepeatHastag = (value) => {
-  const hashtags = value.trim().toLowerCase().split(' ');
-  const uniqueHashtags = new Set(hashtags);
-  return uniqueHashtags.size === hashtags.length;
-};
-
-prestine.addValidator(
-  hashtagsInput,
-  validateInvalidHastag,
-  'введён невалидный хэштег'
-);
-
-prestine.addValidator(
-  hashtagsInput,
-  validateAmountHastag,
-  'превышено количество хэштегов'
-);
-
-prestine.addValidator(
-  hashtagsInput,
-  validateRepeatHastag,
-  'хэштеги повторяются'
-);
-
-formLoadingImage.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-
-  const isValid = prestine.validate();
-  if (isValid) {
-    // eslint-disable-next-line no-console
-    console.log('Форма отправлена');
-  } else {
-    // eslint-disable-next-line no-console
-    console.log('Форма не валидна');
-  }
-});
+export {validateForm};
