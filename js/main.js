@@ -1,9 +1,16 @@
-import {simularPhotoList} from './data.js';
 import {generateThumbnails} from './thumbnails.js';
 import {generateFullSizePost} from './full-size-mode.js';
-import './form-loading.js';
+import {getData} from './api.js';
+import {showErrorMessageGet} from './message.js';
+import {setOnFormSubmit} from './form-loading.js';
 
-const photoList = simularPhotoList();
-generateThumbnails(photoList);
-generateFullSizePost(photoList);
+getData()
+  .then((pictures) => {
+    generateThumbnails(pictures);
+    generateFullSizePost(pictures);
+  })
+  .catch(() => {
+    showErrorMessageGet();
+  });
 
+setOnFormSubmit();
