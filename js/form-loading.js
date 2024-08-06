@@ -5,6 +5,8 @@ import {chooseEffectImage, destroySlider} from './effects.js';
 import {sendData} from './api.js';
 import {showErrorMessageSend, showSuccessMessageSend} from './message.js';
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
   SENDING: 'Отправляю...'
@@ -17,6 +19,7 @@ const buttonClose = formLoading.querySelector('#upload-cancel');
 const hashtagsInput = formLoading.querySelector('.text__hashtags');
 const commentInput = formLoading.querySelector('.text__description');
 const submitButton = formLoading.querySelector('.img-upload__submit');
+const previewImage = formLoading.querySelector('.img-upload__preview img');
 
 const isOpenMessageError = () => Boolean(document.querySelector('.error'));
 
@@ -102,7 +105,14 @@ function onTextFieldKeydown(evt) {
 }
 
 const onInputChange = () => {
-  openEditForm();
+  const file = inputLoadingFile.files[0];
+  const filename = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => filename.endsWith(it));
+
+  if (matches) {
+    previewImage.src = URL.createObjectURL(file);
+    openEditForm();
+  }
 };
 
 inputLoadingFile.addEventListener('change', onInputChange);
