@@ -8,27 +8,27 @@
 //   };
 // };
 
-// // генератор случайных чисел
-// const getRandomInteger = (min, max) => {
-//   const lower = Math.ceil(Math.min(min, max));
-//   const upper = Math.floor(Math.max(min, max));
-//   const result = Math.random() * (upper - lower + 1) + lower;
-//   return Math.floor(result);
-// };
+// генератор случайных чисел
+const getRandomInteger = (min, max) => {
+  const lower = Math.ceil(Math.min(min, max));
+  const upper = Math.floor(Math.max(min, max));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+};
 
-// // генератор уникальных случайных чисел
-// const getUniqueRandomId = (min, max) => {
-//   const previousValues = [];
+// генератор уникальных случайных чисел
+const getUniqueRandomId = (min, max) => {
+  const previousValues = [];
 
-//   return function () {
-//     let currentValue = getRandomInteger(min, max);
-//     while (previousValues.includes(currentValue)) {
-//       currentValue = getRandomInteger(min, max);
-//     }
-//     previousValues.push(currentValue);
-//     return currentValue;
-//   };
-// };
+  return function () {
+    let currentValue = getRandomInteger(min, max);
+    while (previousValues.includes(currentValue)) {
+      currentValue = getRandomInteger(min, max);
+    }
+    previousValues.push(currentValue);
+    return currentValue;
+  };
+};
 
 // //Функция для выбора случайного элемента из массива
 // const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
@@ -42,4 +42,4 @@ const showMessageTemplate = (type) => {
   return template;
 };
 
-export {isEscapeKey, showMessageTemplate};
+export {getUniqueRandomId, isEscapeKey, showMessageTemplate};
