@@ -2,6 +2,13 @@ import {isEscapeKey} from './util.js';
 import {validateForm} from './validation-form.js';
 import {changeScale, resetScale} from './scale.js';
 import {chooseEffectImage, destroySlider} from './effects.js';
+import {sendData} from './api.js';
+import {showErrorMessageSend, showSuccessMessageSend} from './message.js';
+
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Отправляю...'
+};
 
 const formLoading = document.querySelector('#upload-select-image');
 const inputLoadingFile = formLoading.querySelector('#upload-file');
@@ -9,20 +16,41 @@ const imageEditForm = formLoading.querySelector('.img-upload__overlay');
 const buttonClose = formLoading.querySelector('#upload-cancel');
 const hashtagsInput = formLoading.querySelector('.text__hashtags');
 const commentInput = formLoading.querySelector('.text__description');
+const submitButton = formLoading.querySelector('.img-upload__submit');
+
+const isOpenMessageError = () => Boolean(document.querySelector('.error'));
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
 
 const pristine = validateForm(formLoading);
 
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
+const setOnFormSubmit = () => {
+  const onFormSubmit = (evt) => {
+    evt.preventDefault();
 
-  const isValid = pristine.validate();
-  if (isValid) {
-    // eslint-disable-next-line no-console
-    console.log('Форма отправлена');
-  } else {
-    // eslint-disable-next-line no-console
-    console.log('Форма не валидна');
-  }
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(() => {
+          closeEditForm();
+          showSuccessMessageSend();
+        })
+        .catch(() => {
+          showErrorMessageSend();
+        })
+        .finally(unblockSubmitButton);
+    }
+  };
+  formLoading.addEventListener('submit', onFormSubmit);
 };
 
 const openEditForm = () => {
@@ -32,15 +60,14 @@ const openEditForm = () => {
   changeScale();
   chooseEffectImage();
 
-  formLoading.addEventListener('submit', onFormSubmit);
   document.addEventListener('keydown', onDocumentKeydown);
   buttonClose.addEventListener('click', onButtonCloseClick);
 
-  hashtagsInput.addEventListener('keydown', onInputKeydown);
-  commentInput.addEventListener('keydown', onInputKeydown);
+  hashtagsInput.addEventListener('keydown', onTextFieldKeydown);
+  commentInput.addEventListener('keydown', onTextFieldKeydown);
 };
 
-const closeEditForm = () => {
+function closeEditForm () {
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
   formLoading.reset();
@@ -49,16 +76,15 @@ const closeEditForm = () => {
   resetScale();
   destroySlider();
 
-  formLoading.removeEventListener('submit', onFormSubmit);
   document.removeEventListener('keydown', onDocumentKeydown);
   buttonClose.removeEventListener('click', onButtonCloseClick);
 
-  hashtagsInput.removeEventListener('keydown', onInputKeydown);
-  commentInput.removeEventListener('keydown', onInputKeydown);
-};
+  hashtagsInput.removeEventListener('keydown', onTextFieldKeydown);
+  commentInput.removeEventListener('keydown', onTextFieldKeydown);
+}
 
 function onDocumentKeydown(evt) {
-  if (isEscapeKey(evt)) {
+  if (isEscapeKey(evt) && !isOpenMessageError()) {
     evt.preventDefault();
     closeEditForm();
   }
@@ -68,7 +94,7 @@ function onButtonCloseClick() {
   closeEditForm();
 }
 
-function onInputKeydown(evt) {
+function onTextFieldKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     evt.stopPropagation();
@@ -80,3 +106,5 @@ const onInputChange = () => {
 };
 
 inputLoadingFile.addEventListener('change', onInputChange);
+
+export {setOnFormSubmit};

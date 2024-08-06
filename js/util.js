@@ -1,12 +1,12 @@
-// счетчик, создание уникальных id
-const createIdGenerator = () => {
-  let lastGeneratedId = 0;
+// // счетчик, создание уникальных id
+// const createIdGenerator = () => {
+//   let lastGeneratedId = 0;
 
-  return function () {
-    lastGeneratedId += 1;
-    return lastGeneratedId;
-  };
-};
+//   return function () {
+//     lastGeneratedId += 1;
+//     return lastGeneratedId;
+//   };
+// };
 
 // генератор случайных чисел
 const getRandomInteger = (min, max) => {
@@ -30,9 +30,18 @@ const getUniqueRandomId = (min, max) => {
   };
 };
 
-//Функция для выбора случайного элемента из массива
-const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
+// //Функция для выбора случайного элемента из массива
+// const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {createIdGenerator, getRandomInteger, getUniqueRandomId, getRandomArrayElement, isEscapeKey};
+
+function debounce (callback, timeoutDelay) {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+export {getUniqueRandomId, isEscapeKey, debounce};

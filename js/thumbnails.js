@@ -12,11 +12,19 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
   return thumbnail;
 };
 
+const clearThumbnailsList = () => {
+  const pictureList = document.querySelectorAll('.picture');
+  pictureList.forEach((picture) => {
+    picture.remove();
+  });
+};
+
 const generateThumbnails = (pictures) => {
   pictures.forEach((picture) => {
     const pictureItem = createThumbnail(picture);
     pictureListFragment.append(pictureItem);
   });
+  clearThumbnailsList();
   picturesBlock.append(pictureListFragment);
 };
 
