@@ -4,12 +4,15 @@ import {getData} from './api.js';
 import {showErrorMessageGet} from './message.js';
 import {setOnFormSubmit} from './form-loading.js';
 import {showFilterRicture} from './sort.js';
+import {debounce} from './util.js';
+
+const RERENDER_DELAY = 500;
 
 getData()
   .then((pictures) => {
     generateThumbnails(pictures);
     generateFullSizePost(pictures);
-    showFilterRicture(pictures, generateThumbnails);
+    showFilterRicture(pictures, debounce(generateThumbnails, RERENDER_DELAY));
   })
   .catch(() => {
     showErrorMessageGet();

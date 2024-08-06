@@ -18,7 +18,7 @@ const hashtagsInput = formLoading.querySelector('.text__hashtags');
 const commentInput = formLoading.querySelector('.text__description');
 const submitButton = formLoading.querySelector('.img-upload__submit');
 
-const hasOpenMessageError = () => Boolean(document.querySelector('.error'));
+const isOpenMessageError = () => Boolean(document.querySelector('.error'));
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -63,8 +63,8 @@ const openEditForm = () => {
   document.addEventListener('keydown', onDocumentKeydown);
   buttonClose.addEventListener('click', onButtonCloseClick);
 
-  hashtagsInput.addEventListener('keydown', onInputKeydown);
-  commentInput.addEventListener('keydown', onInputKeydown);
+  hashtagsInput.addEventListener('keydown', onTextFieldKeydown);
+  commentInput.addEventListener('keydown', onTextFieldKeydown);
 };
 
 function closeEditForm () {
@@ -79,12 +79,12 @@ function closeEditForm () {
   document.removeEventListener('keydown', onDocumentKeydown);
   buttonClose.removeEventListener('click', onButtonCloseClick);
 
-  hashtagsInput.removeEventListener('keydown', onInputKeydown);
-  commentInput.removeEventListener('keydown', onInputKeydown);
+  hashtagsInput.removeEventListener('keydown', onTextFieldKeydown);
+  commentInput.removeEventListener('keydown', onTextFieldKeydown);
 }
 
 function onDocumentKeydown(evt) {
-  if (isEscapeKey(evt) && !hasOpenMessageError()) {
+  if (isEscapeKey(evt) && !isOpenMessageError()) {
     evt.preventDefault();
     closeEditForm();
   }
@@ -94,7 +94,7 @@ function onButtonCloseClick() {
   closeEditForm();
 }
 
-function onInputKeydown(evt) {
+function onTextFieldKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     evt.stopPropagation();

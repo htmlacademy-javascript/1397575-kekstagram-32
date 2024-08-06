@@ -35,11 +35,13 @@ const getUniqueRandomId = (min, max) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const showMessageTemplate = (type) => {
-  const template = document.querySelector(`#${type}`).content.querySelector(`.${type}`).cloneNode(true);
-  document.body.append(template);
 
-  return template;
-};
+function debounce (callback, timeoutDelay) {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
 
-export {getUniqueRandomId, isEscapeKey, showMessageTemplate};
+export {getUniqueRandomId, isEscapeKey, debounce};

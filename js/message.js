@@ -1,4 +1,4 @@
-import {isEscapeKey, showMessageTemplate} from './util.js';
+import {isEscapeKey} from './util.js';
 
 const MESSAGE_SHOW_TIME = 5000;
 
@@ -6,6 +6,13 @@ const classTemplate = {
   ERROR_GET: 'data-error',
   SENT_SUCCESS: 'success',
   ERROR_SENT: 'error'
+};
+
+const showMessageTemplate = (type) => {
+  const template = document.querySelector(`#${type}`).content.querySelector(`.${type}`).cloneNode(true);
+  document.body.append(template);
+
+  return template;
 };
 
 const createMessageSent = (type) => {
