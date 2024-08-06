@@ -25,35 +25,4 @@ const getData = () => load(routeDate.GET_DATA);
 
 const sendData = (body) => load(routeDate.SEND_DATA, Method.POST, body);
 
-// const getData = () => fetch(`${BASE_URL}${routeDate.GET_DATA}`)
-//   .then((response) => {
-//     if(!response.ok) {
-//       throw new Error(`${response.status} ${response.statusText}`);
-//     }
-//     return response.json();
-//   })
-//   .catch((err) => {
-//     throw new Error(err.message);
-//   });
-
-// const sendData = (body, onSuccess) => fetch(`${BASE_URL}${routeDate.SEND_DATA}`,
-//   {
-//     method: Method.POST,
-//     body
-//   }
-// )
-//   .then((response) => {
-//     if(!response.ok) {
-//       throw new Error();
-//     }
-//     // return response.json();
-//   })
-//   .then(() => {
-//     onSuccess();
-//     sendMessage(messageText.SENT_SUCCESS);
-//   })
-//   .catch(() => {
-//     sendMessage(messageText.ERROR_SENT);
-//   });
-
 export {getData, sendData};
