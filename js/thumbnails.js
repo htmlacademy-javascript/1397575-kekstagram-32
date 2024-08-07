@@ -20,11 +20,11 @@ const clearThumbnailsList = () => {
 };
 
 const generateThumbnails = (pictures) => {
+  clearThumbnailsList();
   pictures.forEach((picture) => {
     const pictureItem = createThumbnail(picture);
     pictureListFragment.append(pictureItem);
   });
-  clearThumbnailsList();
   picturesBlock.append(pictureListFragment);
 };
 

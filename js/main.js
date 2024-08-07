@@ -1,8 +1,8 @@
+import {setOnFormSubmit} from './form-loading.js';
 import {generateThumbnails} from './thumbnails.js';
 import {generateFullSizePost} from './full-size-mode.js';
 import {getData} from './api.js';
 import {showErrorMessageGet} from './messages.js';
-import {setOnFormSubmit} from './form-loading.js';
 import {showFilteredRictures} from './filters.js';
 import {debounce} from './util.js';
 

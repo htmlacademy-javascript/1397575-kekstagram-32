@@ -9,6 +9,8 @@ const EffectName = {
 
 const EffectConfig = {
   [EffectName.DEFAULT]: {
+    filter: 'none',
+    unit: '',
     min: 0,
     max: 100,
     step: 1
@@ -57,11 +59,12 @@ const imagePreview = document.querySelector('.img-upload__preview img');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 
 let currentEffect = EffectName.DEFAULT;
+let isSliderInitialized = false;
 
 const setImageStyle = () => {
   if (currentEffect === EffectName.DEFAULT) {
     sliderContainer.classList.add('hidden');
-    imagePreview.style.filter = '';
+    imagePreview.style.filter = 'none';
   } else {
     sliderContainer.classList.remove('hidden');
     const {filter, unit} = EffectConfig[currentEffect];
@@ -75,16 +78,20 @@ const onSliderUpdate = () => {
 };
 
 const createSliderElement = ({min, max, step}) => {
-  noUiSlider.create(sliderElement, {
-    range: {min, max},
-    start: max,
-    step,
-    connect: 'lower',
-    format: {
-      to: (value) => Number(value),
-      from: (value) => Number(value)
-    }
-  });
+  if (!isSliderInitialized) {
+    noUiSlider.create(sliderElement, {
+      range: {min, max},
+      start: max,
+      step,
+      connect: 'lower',
+      format: {
+        to: (value) => Number(value),
+        from: (value) => Number(value)
+      }
+    });
+    isSliderInitialized = true;
+  }
+
   sliderElement.noUiSlider.on('update', onSliderUpdate);
 };
 
@@ -115,7 +122,8 @@ const chooseEffectImage = () => {
 
 const destroySlider = () => {
   sliderElement.noUiSlider.destroy();
-  imagePreview.style.filter = '';
+  isSliderInitialized = false;
+  imagePreview.style.filter = 'none';
   currentEffect = EffectName.DEFAULT;
   effectsList.removeEventListener('change', onEffectsListChange);
 };

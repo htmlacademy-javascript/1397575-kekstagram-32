@@ -16,7 +16,7 @@ const validateForm = (form) => {
     errorTextClass: 'img-upload__field-wrapper--error'
   });
 
-  const createArrayHastags = (stringHashtags) => stringHashtags.trim().split(' ');
+  const createArrayHastags = (stringHashtags) => stringHashtags.trim().split(/\s+/);
 
   const isInvalidHastag = (value) => {
     if (!value) {

@@ -20,6 +20,7 @@ const hashtagsInput = formLoading.querySelector('.text__hashtags');
 const commentInput = formLoading.querySelector('.text__description');
 const submitButton = formLoading.querySelector('.img-upload__submit');
 const previewImage = formLoading.querySelector('.img-upload__preview img');
+const effectsPreviewList = document.querySelectorAll('.effects__preview');
 
 const isOpenMessageError = () => Boolean(document.querySelector('.error'));
 
@@ -110,7 +111,11 @@ const onInputChange = () => {
   const matches = FILE_TYPES.some((it) => filename.endsWith(it));
 
   if (matches) {
-    previewImage.src = URL.createObjectURL(file);
+    const adressImage = URL.createObjectURL(file);
+    previewImage.src = adressImage;
+    effectsPreviewList.forEach((effectPreview) => {
+      effectPreview.style.backgroundImage = `url(${adressImage})`;
+    });
     openEditForm();
   }
 };
