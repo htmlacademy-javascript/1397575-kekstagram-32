@@ -3,7 +3,7 @@ import {validateForm} from './validation-form.js';
 import {changeScale, resetScale} from './scale.js';
 import {chooseEffectImage, destroySlider} from './effects.js';
 import {sendData} from './api.js';
-import {showErrorMessageSend, showSuccessMessageSend} from './message.js';
+import {showErrorMessageSend, showSuccessMessageSend} from './messages.js';
 
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
@@ -56,6 +56,24 @@ const setOnFormSubmit = () => {
   formLoading.addEventListener('submit', onFormSubmit);
 };
 
+const onDocumentKeydown = (evt) => {
+  if (isEscapeKey(evt) && !isOpenMessageError()) {
+    evt.preventDefault();
+    closeEditForm();
+  }
+};
+
+const onButtonCloseClick = () => {
+  closeEditForm();
+};
+
+const onTextFieldKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    evt.stopPropagation();
+  }
+};
+
 const openEditForm = () => {
   imageEditForm.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -70,7 +88,7 @@ const openEditForm = () => {
   commentInput.addEventListener('keydown', onTextFieldKeydown);
 };
 
-function closeEditForm () {
+function closeEditForm() {
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
   formLoading.reset();
@@ -84,24 +102,6 @@ function closeEditForm () {
 
   hashtagsInput.removeEventListener('keydown', onTextFieldKeydown);
   commentInput.removeEventListener('keydown', onTextFieldKeydown);
-}
-
-function onDocumentKeydown(evt) {
-  if (isEscapeKey(evt) && !isOpenMessageError()) {
-    evt.preventDefault();
-    closeEditForm();
-  }
-}
-
-function onButtonCloseClick() {
-  closeEditForm();
-}
-
-function onTextFieldKeydown(evt) {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    evt.stopPropagation();
-  }
 }
 
 const onInputChange = () => {

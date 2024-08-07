@@ -1,4 +1,4 @@
-const effectsName = {
+const EffectName = {
   DEFAULT: 'none',
   CHROME: 'chrome',
   SEPIA: 'sepia',
@@ -7,41 +7,41 @@ const effectsName = {
   HEAT: 'heat'
 };
 
-const effectsConfig = {
-  [effectsName.DEFAULT]: {
+const EffectConfig = {
+  [EffectName.DEFAULT]: {
     min: 0,
     max: 100,
     step: 1
   },
-  [effectsName.CHROME]: {
+  [EffectName.CHROME]: {
     filter: 'grayscale',
     unit: '',
     min: 0,
     max: 1,
     step: 0.1
   },
-  [effectsName.SEPIA]: {
+  [EffectName.SEPIA]: {
     filter: 'sepia',
     unit: '',
     min: 0,
     max: 1,
     step: 0.1
   },
-  [effectsName.MARVIN]: {
+  [EffectName.MARVIN]: {
     filter: 'invert',
     unit: '%',
     min: 0,
     max: 100,
     step: 1
   },
-  [effectsName.PHOBOS]: {
+  [EffectName.PHOBOS]: {
     filter: 'blur',
     unit: 'px',
     min: 0,
     max: 3,
     step: 0.1
   },
-  [effectsName.HEAT]: {
+  [EffectName.HEAT]: {
     filter: 'brightness',
     unit: '',
     min: 1,
@@ -56,15 +56,15 @@ const effectsList = document.querySelector('.effects__list');
 const imagePreview = document.querySelector('.img-upload__preview img');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 
-let currentEffect = effectsName.DEFAULT;
+let currentEffect = EffectName.DEFAULT;
 
 const setImageStyle = () => {
-  if (currentEffect === effectsName.DEFAULT) {
+  if (currentEffect === EffectName.DEFAULT) {
     sliderContainer.classList.add('hidden');
     imagePreview.style.filter = '';
   } else {
     sliderContainer.classList.remove('hidden');
-    const {filter, unit} = effectsConfig[currentEffect];
+    const {filter, unit} = EffectConfig[currentEffect];
     imagePreview.style.filter = `${filter}(${sliderInput.value}${unit})`;
   }
 };
@@ -102,13 +102,13 @@ const onEffectsListChange = (evt) => {
 
   if (itemEffect) {
     currentEffect = itemEffect.value;
-    updateSlider(effectsConfig[currentEffect]);
-    setImageStyle(effectsConfig[currentEffect]);
+    updateSlider(EffectConfig[currentEffect]);
+    setImageStyle(EffectConfig[currentEffect]);
   }
 };
 
 const chooseEffectImage = () => {
-  createSliderElement(effectsConfig[currentEffect]);
+  createSliderElement(EffectConfig[currentEffect]);
   setImageStyle();
   effectsList.addEventListener('change', onEffectsListChange);
 };
@@ -116,7 +116,7 @@ const chooseEffectImage = () => {
 const destroySlider = () => {
   sliderElement.noUiSlider.destroy();
   imagePreview.style.filter = '';
-  currentEffect = effectsName.DEFAULT;
+  currentEffect = EffectName.DEFAULT;
   effectsList.removeEventListener('change', onEffectsListChange);
 };
 

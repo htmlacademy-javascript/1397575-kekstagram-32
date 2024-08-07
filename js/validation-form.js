@@ -1,6 +1,7 @@
 const MAX_COUNT_HASHTAGS = 5;
 const ETALON_HASHTAG = /^#[a-zа-яё0-9]{1,19}$/i;
-const ERROR_MESSAGE = {
+
+const ErrorMessage = {
   ISVALID: 'введён невалидный хэштег',
   MAXCOUNT: `превышено количество хэштегов, максимальное количество - ${MAX_COUNT_HASHTAGS}`,
   REPEAT: 'хэштеги повторяются'
@@ -35,19 +36,19 @@ const validateForm = (form) => {
   pristine.addValidator(
     hashtagsInput,
     isInvalidHastag,
-    ERROR_MESSAGE.ISVALID
+    ErrorMessage.ISVALID
   );
 
   pristine.addValidator(
     hashtagsInput,
     checkAmountHastag,
-    ERROR_MESSAGE.MAXCOUNT
+    ErrorMessage.MAXCOUNT
   );
 
   pristine.addValidator(
     hashtagsInput,
     isRepeatHastag,
-    ERROR_MESSAGE.REPEAT
+    ErrorMessage.REPEAT
   );
 
   return pristine;
