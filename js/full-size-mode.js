@@ -2,15 +2,18 @@ import {isEscapeKey} from './util.js';
 
 const thumbnails = document.querySelector('.pictures');
 const bigPicture = document.querySelector('.big-picture');
-const buttonClosePictire = bigPicture.querySelector('.big-picture__cancel');
+const buttonCloseBigPictire = bigPicture.querySelector('.big-picture__cancel');
 const commentsList = bigPicture.querySelector('.social__comments');
 const commentItem = commentsList.querySelector('.social__comment');
 const counterComments = bigPicture.querySelector('.social__comment-count');
-const loaderComments = bigPicture.querySelector('.comments-loader');
-const shownCountComments = counterComments.querySelector('.social__comment-shown-count');
-const commentsListFragment = document.createDocumentFragment(); //для добавления комментариев
+const countShownComments = counterComments.querySelector('.social__comment-shown-count');
+const countTotalComments = counterComments.querySelector('.social__comment-total-count');
+const buttonLoaderComments = bigPicture.querySelector('.comments-loader');
+
 let showComments = 0;
 let commentsArray = [];
+
+const commentsListFragment = document.createDocumentFragment(); //контейнер для добавления комментариев
 
 // Заполнение поста данными
 const createFullSizePicture = ({url, description, likes}) => {
@@ -36,10 +39,10 @@ const renderComments = (comments) => {
   showComments += 5;
 
   if (showComments >= comments.length) {
-    loaderComments.classList.add('hidden');
+    buttonLoaderComments.classList.add('hidden');
     showComments = comments.length;
   } else {
-    loaderComments.classList.remove('hidden');
+    buttonLoaderComments.classList.remove('hidden');
   }
 
   for (let i = 0; i < showComments; i++) {
@@ -48,18 +51,25 @@ const renderComments = (comments) => {
   }
   commentsList.innerHTML = '';
   commentsList.append(commentsListFragment);
-  counterComments.querySelector('.social__comment-total-count').textContent = comments.length;
-  shownCountComments.textContent = showComments;
+  countTotalComments.textContent = comments.length;
+  countShownComments.textContent = showComments;
 };
 
 const onButtonLoaderClick = () => {
   renderComments(commentsArray);
 };
 
+const onDocumentKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeFullSizePost();
+  }
+};
+
 // Функция для отображения поста с изображением
 const openFullSizePost = (data) => {
   bigPicture.classList.remove('hidden');
-  loaderComments.classList.add('hidden');
+  buttonLoaderComments.classList.add('hidden');
   document.body.classList.add('modal-open');
 
   createFullSizePicture(data);
@@ -67,8 +77,8 @@ const openFullSizePost = (data) => {
   renderComments(commentsArray);
 
   document.addEventListener('keydown', onDocumentKeydown);
-  buttonClosePictire.addEventListener('click',closeFullSizePost);
-  loaderComments.addEventListener('click', onButtonLoaderClick);
+  buttonCloseBigPictire.addEventListener('click',closeFullSizePost);
+  buttonLoaderComments.addEventListener('click', onButtonLoaderClick);
 };
 
 // функция для скрытия поста
@@ -78,15 +88,8 @@ function closeFullSizePost() {
 
   showComments = 0;
   document.removeEventListener('keydown', onDocumentKeydown);
-  buttonClosePictire.removeEventListener('click',closeFullSizePost);
-  loaderComments.removeEventListener('click', onButtonLoaderClick);
-}
-
-function onDocumentKeydown(evt) {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeFullSizePost();
-  }
+  buttonCloseBigPictire.removeEventListener('click',closeFullSizePost);
+  buttonLoaderComments.removeEventListener('click', onButtonLoaderClick);
 }
 
 const generateFullSizePost = (data) => {
