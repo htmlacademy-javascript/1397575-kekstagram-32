@@ -9,8 +9,6 @@ const EffectName = {
 
 const EffectConfig = {
   [EffectName.DEFAULT]: {
-    filter: 'none',
-    unit: '',
     min: 0,
     max: 100,
     step: 1
