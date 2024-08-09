@@ -2,10 +2,13 @@ import {isEscapeKey} from './util.js';
 
 const MESSAGE_SHOW_TIME = 5000;
 
-const classTemplate = {
-  ERROR_GET: 'data-error',
-  SENT_SUCCESS: 'success',
-  ERROR_SENT: 'error'
+const TypeMessageGet = {
+  ERROR: 'data-error'
+};
+
+const TypeMessageSent = {
+  SUCCESS: 'success',
+  ERROR: 'error'
 };
 
 const showMessageTemplate = (type) => {
@@ -16,18 +19,18 @@ const showMessageTemplate = (type) => {
 };
 
 const createMessageSent = (type) => {
-  const template = showMessageTemplate(type);
-  const closeButton = template.querySelector(`.${type}__button`);
+  const message = showMessageTemplate(type);
+  const buttonCloseMessage = message.querySelector(`.${type}__button`);
 
-  closeButton.addEventListener('click', onCloseButtonClick);
+  buttonCloseMessage.addEventListener('click', onCloseButtonClick);
   document.addEventListener('keydown', onDocumentKeydown);
   document.body.addEventListener('click', onBodyClick);
 
   const hideMessage = () => {
-    closeButton.addEventListener('click', onCloseButtonClick);
+    buttonCloseMessage.addEventListener('click', onCloseButtonClick);
     document.removeEventListener('keydown', onDocumentKeydown);
     document.body.removeEventListener('click', onBodyClick);
-    template.remove();
+    message.remove();
   };
 
   function onCloseButtonClick () {
@@ -49,13 +52,13 @@ const createMessageSent = (type) => {
 };
 
 const showErrorMessageGet = () => {
-  const template = showMessageTemplate(classTemplate.ERROR_GET);
+  const message = showMessageTemplate(TypeMessageGet.ERROR);
   setTimeout(() => {
-    template.remove();
+    message.remove();
   }, MESSAGE_SHOW_TIME);
 };
 
-const showErrorMessageSend = () => createMessageSent(classTemplate.ERROR_SENT);
-const showSuccessMessageSend = () => createMessageSent(classTemplate.SENT_SUCCESS);
+const showErrorMessageSend = () => createMessageSent(TypeMessageSent.ERROR);
+const showSuccessMessageSend = () => createMessageSent(TypeMessageSent.SUCCESS);
 
 export {showErrorMessageGet, showErrorMessageSend, showSuccessMessageSend};

@@ -3,7 +3,9 @@ import {validateForm} from './validation-form.js';
 import {changeScale, resetScale} from './scale.js';
 import {chooseEffectImage, destroySlider} from './effects.js';
 import {sendData} from './api.js';
-import {showErrorMessageSend, showSuccessMessageSend} from './message.js';
+import {showErrorMessageSend, showSuccessMessageSend} from './messages.js';
+
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -17,6 +19,8 @@ const buttonClose = formLoading.querySelector('#upload-cancel');
 const hashtagsInput = formLoading.querySelector('.text__hashtags');
 const commentInput = formLoading.querySelector('.text__description');
 const submitButton = formLoading.querySelector('.img-upload__submit');
+const previewImage = formLoading.querySelector('.img-upload__preview img');
+const effectsPreviewList = document.querySelectorAll('.effects__preview');
 
 const isOpenMessageError = () => Boolean(document.querySelector('.error'));
 
@@ -53,6 +57,24 @@ const setOnFormSubmit = () => {
   formLoading.addEventListener('submit', onFormSubmit);
 };
 
+const onDocumentKeydown = (evt) => {
+  if (isEscapeKey(evt) && !isOpenMessageError()) {
+    evt.preventDefault();
+    closeEditForm();
+  }
+};
+
+const onButtonCloseClick = () => {
+  closeEditForm();
+};
+
+const onTextFieldKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    evt.stopPropagation();
+  }
+};
+
 const openEditForm = () => {
   imageEditForm.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -67,7 +89,7 @@ const openEditForm = () => {
   commentInput.addEventListener('keydown', onTextFieldKeydown);
 };
 
-function closeEditForm () {
+function closeEditForm() {
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
   formLoading.reset();
@@ -83,26 +105,19 @@ function closeEditForm () {
   commentInput.removeEventListener('keydown', onTextFieldKeydown);
 }
 
-function onDocumentKeydown(evt) {
-  if (isEscapeKey(evt) && !isOpenMessageError()) {
-    evt.preventDefault();
-    closeEditForm();
-  }
-}
-
-function onButtonCloseClick() {
-  closeEditForm();
-}
-
-function onTextFieldKeydown(evt) {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    evt.stopPropagation();
-  }
-}
-
 const onInputChange = () => {
-  openEditForm();
+  const file = inputLoadingFile.files[0];
+  const filename = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => filename.endsWith(it));
+
+  if (matches) {
+    const adressImage = URL.createObjectURL(file);
+    previewImage.src = adressImage;
+    effectsPreviewList.forEach((effectPreview) => {
+      effectPreview.style.backgroundImage = `url(${adressImage})`;
+    });
+    openEditForm();
+  }
 };
 
 inputLoadingFile.addEventListener('change', onInputChange);

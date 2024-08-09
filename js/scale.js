@@ -9,11 +9,11 @@ const scaleControl = document.querySelector('.scale');
 const buttonScaleUp = scaleControl.querySelector('.scale__control--smaller');
 const buttonScaleDown = scaleControl.querySelector('.scale__control--bigger');
 const scaleInput = scaleControl.querySelector('.scale__control--value');
-const imagePreview = document.querySelector('.img-upload__preview img');
+const previewImage = document.querySelector('.img-upload__preview img');
 
 const scaleImage = (value) => {
   scaleInput.value = `${value}%`;
-  imagePreview.style.transform = `scale(${value / FULL_PERCENT})`;
+  previewImage.style.transform = `scale(${value / FULL_PERCENT})`;
 };
 
 const onScaleUpButtonClick = () => {

@@ -49,7 +49,8 @@ const showFilteredRictures = (arrayPictures, cb) => {
       document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
       currentFilter.classList.add('img-filters__button--active');
       const nameFilter = currentFilter.id;
-      cb(getSortedPictures(arrayPictures, nameFilter));
+      const sortedArray = getSortedPictures(arrayPictures, nameFilter);
+      cb(sortedArray);
     }
   });
 };
