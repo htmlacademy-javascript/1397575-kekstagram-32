@@ -50,7 +50,7 @@ const EffectConfig = {
   },
 };
 
-const sliderElement = document.querySelector('.effect-level__slider');
+const slider = document.querySelector('.effect-level__slider');
 const sliderInput = document.querySelector('.effect-level__value');
 const effectsList = document.querySelector('.effects__list');
 const imagePreview = document.querySelector('.img-upload__preview img');
@@ -71,13 +71,13 @@ const setImageStyle = () => {
 };
 
 const onSliderUpdate = () => {
-  sliderInput.value = sliderElement.noUiSlider.get();
+  sliderInput.value = slider.noUiSlider.get();
   setImageStyle();
 };
 
-const createSliderElement = ({min, max, step}) => {
+const createSlider = ({min, max, step}) => {
   if (!isSliderInitialized) {
-    noUiSlider.create(sliderElement, {
+    noUiSlider.create(slider, {
       range: {min, max},
       start: max,
       step,
@@ -90,11 +90,11 @@ const createSliderElement = ({min, max, step}) => {
     isSliderInitialized = true;
   }
 
-  sliderElement.noUiSlider.on('update', onSliderUpdate);
+  slider.noUiSlider.on('update', onSliderUpdate);
 };
 
 const updateSlider = ({min, max, step}) => {
-  sliderElement.noUiSlider.updateOptions({
+  slider.noUiSlider.updateOptions({
     range: {min, max},
     start: max,
     step: step
@@ -113,13 +113,13 @@ const onEffectsListChange = (evt) => {
 };
 
 const chooseEffectImage = () => {
-  createSliderElement(EffectConfig[currentEffect]);
+  createSlider(EffectConfig[currentEffect]);
   setImageStyle();
   effectsList.addEventListener('change', onEffectsListChange);
 };
 
 const destroySlider = () => {
-  sliderElement.noUiSlider.destroy();
+  slider.noUiSlider.destroy();
   isSliderInitialized = false;
   imagePreview.style.filter = 'none';
   currentEffect = EffectName.DEFAULT;
