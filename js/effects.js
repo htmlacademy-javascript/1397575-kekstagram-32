@@ -73,7 +73,8 @@ const setImageStyle = () => {
 };
 
 const onSliderUpdate = () => {
-  sliderInput.value = slider.noUiSlider.get();
+  const value = slider.noUiSlider.get();
+  sliderInput.value = value % 1 === 0 ? value.toFixed(0) : value.toFixed(1);
   setImageStyle();
 };
 
@@ -124,7 +125,7 @@ const destroySlider = () => {
   slider.noUiSlider.destroy();
   isSliderInitialized = false;
   imagePreview.style.filter = 'none';
-  sliderInput.value = '';
+  sliderInput.setAttribute('value', '');
   currentEffect = EffectName.DEFAULT;
   effectsList.removeEventListener('change', onEffectsListChange);
 };
