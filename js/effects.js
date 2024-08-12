@@ -63,11 +63,13 @@ const setImageStyle = () => {
   if (currentEffect === EffectName.DEFAULT) {
     sliderContainer.classList.add('hidden');
     imagePreview.style.filter = 'none';
+    sliderInput.value = '';
   } else {
     sliderContainer.classList.remove('hidden');
     const {filter, unit} = EffectConfig[currentEffect];
     imagePreview.style.filter = `${filter}(${sliderInput.value}${unit})`;
   }
+  sliderInput.setAttribute('value', sliderInput.value);
 };
 
 const onSliderUpdate = () => {
@@ -122,6 +124,7 @@ const destroySlider = () => {
   slider.noUiSlider.destroy();
   isSliderInitialized = false;
   imagePreview.style.filter = 'none';
+  sliderInput.value = '';
   currentEffect = EffectName.DEFAULT;
   effectsList.removeEventListener('change', onEffectsListChange);
 };

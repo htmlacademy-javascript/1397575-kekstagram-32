@@ -12,7 +12,7 @@ const scaleInput = scaleControl.querySelector('.scale__control--value');
 const previewImage = document.querySelector('.img-upload__preview img');
 
 const scaleImage = (value) => {
-  scaleInput.value = `${value}%`;
+  scaleInput.setAttribute('value', `${value}%`);
   previewImage.style.transform = `scale(${value / FULL_PERCENT})`;
 };
 
